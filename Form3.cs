@@ -65,6 +65,7 @@ namespace McDonalds
 
         private void Zapusk_Click(object sender, EventArgs e)
         {
+            dataGridView1.Rows.Clear();
             int i = 0;
             string change = comboBox1.SelectedItem.ToString();    // считываем значения из раскрывающегося списка и выясняем номер столбца в data
             if (change == "Холестерин")
@@ -80,15 +81,17 @@ namespace McDonalds
 
             if (double.TryParse(MinAtextBox1.Text, out double elemMin) &
                 double.TryParse(MaxAtextBox2.Text, out double elemMax) &
-                double.TryParse(textBox2.Text, out double kalorMin) &
-                double.TryParse(textBox1.Text, out double kalorMax))
+                double.TryParse(textBox1.Text, out double kalorMin) &
+                double.TryParse(textBox2.Text, out double kalorMax))
             {
                 foreach (string[] word in SharedData.Data)                                       // добавляем в таблицу строки, соотвествующеие критерию 
                     if ((Double.Parse(word[i]) < elemMax & Double.Parse(word[i]) > elemMin)
                        & (Double.Parse(word[3]) < kalorMax & Double.Parse(word[3]) > kalorMin))
+                    {
                         dataGridView1.Rows.Add(word[0], word[1], word[i], word[3], word[2]);
+                    }
             }
-            else 
+            else
             {
                 MessageBox.Show("Введено некорректное значение. Попробуйте ещё раз!");
                 MinAtextBox1.Clear();

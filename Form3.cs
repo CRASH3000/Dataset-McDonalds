@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace McDonalds
 {
@@ -54,6 +55,7 @@ namespace McDonalds
             comboBox1.Items.Add("Углеводы");  //14
             comboBox1.Items.Add("Сахар");   //18
             comboBox1.Items.Add("Белок"); //19
+            comboBox1.SelectedIndex = 0;
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -75,17 +77,25 @@ namespace McDonalds
                 i = 18;
             if (change == "Белок")
                 i = 19;
-            double elemMin = Double.Parse(MinAtextBox1.Text);          //считываем значения из текстовых ячеек
-            double elemMax = Double.Parse(MaxAtextBox2.Text);
-            double kalorMin = Double.Parse(textBox1.Text);
-            double kalorMax = Double.Parse(textBox2.Text);
 
-            //MessageBox.Show($"{i}, {elemMin}, {elemMax}, {kalorMin}, {kalorMax}");  проверить ввод.
-
-            foreach (string[] word in SharedData.Data)                                       // добавляем в таблицу строки, соотвествующеие критерию 
-                if ((Double.Parse(word[i]) < elemMax & Double.Parse(word[i]) > elemMin)
-                   & (Double.Parse(word[3]) < kalorMax & Double.Parse(word[3]) > kalorMin))
-                    dataGridView1.Rows.Add(word[0], word[1], word[i], word[3], word[2]);
+            if (double.TryParse(MinAtextBox1.Text, out double elemMin) &
+                double.TryParse(MaxAtextBox2.Text, out double elemMax) &
+                double.TryParse(textBox2.Text, out double kalorMin) &
+                double.TryParse(textBox1.Text, out double kalorMax))
+            {
+                foreach (string[] word in SharedData.Data)                                       // добавляем в таблицу строки, соотвествующеие критерию 
+                    if ((Double.Parse(word[i]) < elemMax & Double.Parse(word[i]) > elemMin)
+                       & (Double.Parse(word[3]) < kalorMax & Double.Parse(word[3]) > kalorMin))
+                        dataGridView1.Rows.Add(word[0], word[1], word[i], word[3], word[2]);
+            }
+            else 
+            {
+                MessageBox.Show("Введено некорректное значение. Попробуйте ещё раз!");
+                MinAtextBox1.Clear();
+                MaxAtextBox2.Clear();
+                textBox2.Clear();
+                textBox1.Clear();
+            }
         }
     }
     public static class SharedData    //Открываем общий доступ к файлу Data 

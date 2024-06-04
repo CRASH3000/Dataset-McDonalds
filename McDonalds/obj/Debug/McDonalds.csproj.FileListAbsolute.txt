@@ -1,27 +1,18 @@
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.csproj.AssemblyReference.cache
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.Form1.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.Form2.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.Form3.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.csproj.GenerateResource.cache
-C:\Users\User\Desktop\Dataset-McDonalds-master\bin\Debug\Resources\dataset - menu McDonalds.csv
-C:\Users\User\Desktop\Dataset-McDonalds-master\bin\Debug\McDonalds.exe.config
-C:\Users\User\Desktop\Dataset-McDonalds-master\bin\Debug\McDonalds.exe
-C:\Users\User\Desktop\Dataset-McDonalds-master\bin\Debug\McDonalds.pdb
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.Properties.Resources.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.csproj.CoreCompileInputs.cache
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.exe
-C:\Users\User\Desktop\Dataset-McDonalds-master\obj\Debug\McDonalds.pdb
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\bin\Debug\Resources\dataset - menu McDonalds.csv
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\bin\Debug\McDonalds.exe.config
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\bin\Debug\McDonalds.exe
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\bin\Debug\McDonalds.pdb
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.csproj.AssemblyReference.cache
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.Form1.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.Form2.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.Form3.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.Properties.Resources.resources
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.csproj.GenerateResource.cache
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.csproj.CoreCompileInputs.cache
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.exe
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.pdb
-C:\Users\User\Desktop\Dataset-McDonalds-master_изм1\obj\Debug\McDonalds.Form4.resources
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.csproj.AssemblyReference.cache
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.Form1.resources
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.Form2.resources
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.Properties.Resources.resources
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.csproj.GenerateResource.cache
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.csproj.CoreCompileInputs.cache
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\Resources\dataset - menu McDonalds.csv
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\McDonalds.exe.config
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\McDonalds.exe
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\McDonalds.pdb
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\OxyPlot.dll
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\OxyPlot.WindowsForms.dll
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\OxyPlot.xml
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\bin\Debug\OxyPlot.WindowsForms.xml
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.csproj.Up2Date
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.exe
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.pdb
+C:\Users\User\Desktop\Dataset-McDonalds-master\McDonalds\obj\Debug\McDonalds.Form4.resources

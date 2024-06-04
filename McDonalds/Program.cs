@@ -13,8 +13,10 @@ namespace McDonalds
     }
 
 
-    public static class Program
+
+    internal static class Program
     {
+
         static string[] SplitByCommaWithoutQuotes(string input)   //Пропускаем выражения в кавычках при разбиении на пункты
         {
             List<string> parts = new List<string>();

@@ -148,29 +148,37 @@ namespace McDonalds
                 }
             }
         }
-
         private void DisplaySearchProductContent()
         {
             // Очистка правой панели
             this.rightPanel.Controls.Clear();
 
-            // Создание TextBox для ввода поиска
-            TextBox searchTextBox = new TextBox();
-            searchTextBox.Location = new Point(10, 10);
-            searchTextBox.Size = new Size(200, 20);
-            this.rightPanel.Controls.Add(searchTextBox);
+            // Создание заголовка
+            Label titleLabel = new Label();
+            titleLabel.Text = "Сравнение суточной нормы БЖУ и БЖУ блюда";
+            titleLabel.Location = new Point(10, 10);
+            titleLabel.Size = new Size(300, 20);
+            titleLabel.Font = new Font(titleLabel.Font, FontStyle.Bold);
+            this.rightPanel.Controls.Add(titleLabel);
 
-            // Создание ComboBox для выпадающего списка блюд
+            // Создание метки для комбинированного ввода и списка
+            Label searchLabel = new Label();
+            searchLabel.Text = "Введите название блюда";
+            searchLabel.Location = new Point(10, 40);
+            searchLabel.Size = new Size(200, 20);
+            this.rightPanel.Controls.Add(searchLabel);
+
+            // Создание ComboBox для ввода и списка блюд
             ComboBox dishComboBox = new ComboBox();
-            dishComboBox.Location = new Point(10, 40);
+            dishComboBox.Location = new Point(10, 70);
             dishComboBox.Size = new Size(200, 20);
-            dishComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            dishComboBox.DropDownStyle = ComboBoxStyle.DropDown;
             this.rightPanel.Controls.Add(dishComboBox);
 
             // Настройка поиска блюд
-            searchTextBox.TextChanged += (sender, e) =>
+            dishComboBox.TextChanged += (sender, e) =>
             {
-                string query = searchTextBox.Text.ToLower();
+                string query = dishComboBox.Text.ToLower();
                 var filteredDishes = menuData.AsEnumerable()
                     .Where(row => row.Field<string>("Item").ToLower().Contains(query))
                     .Select(row => row.Field<string>("Item"))
@@ -178,6 +186,9 @@ namespace McDonalds
 
                 dishComboBox.Items.Clear();
                 dishComboBox.Items.AddRange(filteredDishes.ToArray());
+                dishComboBox.DroppedDown = true; // Открыть выпадающий список
+                dishComboBox.SelectionStart = query.Length; // Установить курсор в конец текста
+                dishComboBox.SelectionLength = 0; // Убрать выделение
             };
 
             // Настройка действия при выборе блюда из списка
@@ -203,6 +214,8 @@ namespace McDonalds
             this.rightPanel.VerticalScroll.Enabled = true;
             this.rightPanel.VerticalScroll.Visible = true;
         }
+
+
 
         // Метод для отображения контента в правой панели
         private void DisplayRightPanelContent()
@@ -422,18 +435,17 @@ namespace McDonalds
                 MarkerSize = 5,
                 MarkerFill = OxyColors.Blue,
                 MarkerStroke = OxyColors.Black,
-                MarkerStrokeThickness = 1.5
+                MarkerStrokeThickness = 1.5,
+                TrackerFormatString = "Блюдо: {Tag}\nКалории: {X}\nРазмер порции: {Y}"
             };
-      
+
             // Добавляем точки для каждого блюда из DataTable
             foreach (DataRow row in menuData.Rows)
             {
                 string servingSize = row["Serving Size"].ToString();
                 Console.WriteLine(servingSize);
 
-                // Извлекаем числовое значение из строки размера порции 
-                // Предполагаем, что размер порции указан в скобках и в граммах или унциях
-
+                // Извлекаем числовое значение из строки размера порции
                 int startIndex = servingSize.IndexOf('(') + 1;
                 int endIndex = servingSize.IndexOf('g', startIndex);
 
@@ -474,10 +486,15 @@ namespace McDonalds
                 {
                     continue; // Пропускаем текущее блюдо, если не удалось сконвертировать
                 }
-         
+
                 string dishName = row["Item"].ToString();
 
-                scatterSeries.Points.Add(new ScatterPoint(calories, portion, tag: dishName));
+                var point = new ScatterPoint(calories, portion)
+                {
+                    Tag = dishName
+                };
+
+                scatterSeries.Points.Add(point);
             }
 
             model.Series.Add(scatterSeries);
@@ -489,20 +506,15 @@ namespace McDonalds
                 Model = model
             };
 
-            // Создаем новую форму для отображения графика
-            var scatterPlotForm = new Form
-            {
-                Text = "Распределение блюд по углеводам и калориям",
-                Size = new Size(800, 600),
-                StartPosition = FormStartPosition.CenterScreen
-            };
-            scatterPlotForm.Controls.Add(plotView);
+            // Очистка правой панели
+            this.rightPanel.Controls.Clear();
 
-            // Отображаем форму с графиком
-            scatterPlotForm.ShowDialog();
+            // Добавляем PlotView на rightPanel
+            this.rightPanel.Controls.Add(plotView);
         }
+
     }
-   
+
 }
 public class Dish
 {

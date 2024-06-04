@@ -1,14 +1,25 @@
 ﻿using System;
 using System.Data;
+using System.Data.Common;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
+using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
+using OxyPlot;
+using OxyPlot.Axes;
+using OxyPlot.Legends;
+using OxyPlot.Series;
+using OxyPlot.WindowsForms;
+
 
 namespace McDonalds
 {
     public partial class Form2 : Form
     {
         private DataTable menuData; // Таблица данных для хранения меню
+        private OxyPlot.WindowsForms.PlotView plotView = new OxyPlot.WindowsForms.PlotView(); // График для отображения БЖУ
         public Form2()
         {
             InitializeComponent();
@@ -46,8 +57,10 @@ namespace McDonalds
         // Метод, который вызывается при загрузке формы
         private void Form2_Load(object sender, EventArgs e)
         {
-            string[] buttonNames = { "Все блюда", "Блюда 0 ккал", "McChiken и железо", "Сахар и Каллории", "Блюда с транс-жирами", "Средння доля Beef & Pork" };
+            string[] buttonNames = { "Все блюда", "Содержание БЖУ блюд", "Распределение блюд по порции и калориям", "Блюда 0 ккал", "McChiken и железо", "Сахар и Каллории", "Блюда с транс-жирами", "Средння доля Beef & Pork" };
             Image[] buttonImages = {
+                Properties.Resources.AllMenuIcon,
+                Properties.Resources.AllMenuIcon,
                 Properties.Resources.AllMenuIcon,
                 Properties.Resources.Water_Icon,
                 Properties.Resources.How_Many_Macchiquins_Icon,
@@ -89,10 +102,78 @@ namespace McDonalds
         private void Button_Click(object sender, EventArgs e)
         {
             Button clickedButton = sender as Button;
-            if (clickedButton != null && clickedButton.Text == "Все блюда")
+            if (clickedButton != null)
             {
-                DisplayRightPanelContent();
+                
+                string text = clickedButton.Text;
+                switch (text)
+                {
+                    case "Все блюда":
+                        DisplayRightPanelContent();
+                        break;
+                    case "Содержание БЖУ блюд":
+                        DisplaySearchProductContent();
+                        break;
+                    case "Распределение блюд по порции и калориям":
+                        DisplayScatterPlot();
+                        break;
+                }
             }
+        }
+
+        private void DisplaySearchProductContent()
+        {
+            // Очистка правой панели
+            this.rightPanel.Controls.Clear();
+
+            // Создание TextBox для ввода поиска
+            TextBox searchTextBox = new TextBox();
+            searchTextBox.Location = new Point(10, 10);
+            searchTextBox.Size = new Size(200, 20);
+            this.rightPanel.Controls.Add(searchTextBox);
+
+            // Создание ComboBox для выпадающего списка блюд
+            ComboBox dishComboBox = new ComboBox();
+            dishComboBox.Location = new Point(10, 40);
+            dishComboBox.Size = new Size(200, 20);
+            dishComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            this.rightPanel.Controls.Add(dishComboBox);
+
+            // Настройка поиска блюд
+            searchTextBox.TextChanged += (sender, e) =>
+            {
+                string query = searchTextBox.Text.ToLower();
+                var filteredDishes = menuData.AsEnumerable()
+                    .Where(row => row.Field<string>("Item").ToLower().Contains(query))
+                    .Select(row => row.Field<string>("Item"))
+                    .ToList();
+
+                dishComboBox.Items.Clear();
+                dishComboBox.Items.AddRange(filteredDishes.ToArray());
+            };
+
+            // Настройка действия при выборе блюда из списка
+            dishComboBox.SelectedIndexChanged += (sender, e) =>
+            {
+                if (dishComboBox.SelectedItem != null)
+                {
+                    string selectedDish = dishComboBox.SelectedItem.ToString();
+                    var selectedRow = menuData.AsEnumerable()
+                        .FirstOrDefault(row => row.Field<string>("Item") == selectedDish);
+
+                    if (selectedRow != null)
+                    {
+                        ShowProductBJU(selectedRow);
+                    }
+                }
+            };
+
+            // Настройка прокрутки
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
         }
 
         // Метод для отображения контента в правой панели
@@ -163,6 +244,55 @@ namespace McDonalds
             }
         }
 
+        private void ShowProductBJU(DataRow productData)
+        {
+
+            this.rightPanel.Controls.Remove(plotView);
+            Dish dish = new Dish();
+
+            foreach (DataColumn column in productData.Table.Columns)
+            {
+             
+                // Заполняем свойства объекта Dish
+                switch (column.ColumnName.ToLower())
+                {
+                    case "item":
+                        dish.Name = productData[column].ToString();
+                        break;
+                    case "protein":
+                        dish.Protein = Convert.ToDouble(productData[column]);
+                        break;
+                    case "total fat":
+                        dish.Fat = Convert.ToDouble(productData[column]);
+                        break;
+                    case "carbohydrates":
+                        dish.Carbohydrates = Convert.ToDouble(productData[column]);
+                        break;
+                }
+            }
+
+            plotView.Location = new System.Drawing.Point(100, 100);
+            plotView.Name = "plotView";
+            plotView.PanCursor = System.Windows.Forms.Cursors.Hand;
+            plotView.Size = new System.Drawing.Size(500, 350);
+            plotView.TabIndex = 3;
+            plotView.Text = "plotView";
+            plotView.ZoomHorizontalCursor = System.Windows.Forms.Cursors.SizeWE;
+            plotView.ZoomRectangleCursor = System.Windows.Forms.Cursors.SizeNWSE;
+            plotView.ZoomVerticalCursor = System.Windows.Forms.Cursors.SizeNS;
+
+            plotView.Model = GetPlotModel2(dish);
+
+            this.rightPanel.Controls.Add(plotView);
+
+            // Настройка прокрутки
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
+        }
+
         // Метод для отображения информации о продукте в новом окне
         private void ShowProductInfo(DataRow productData)
         {
@@ -190,5 +320,166 @@ namespace McDonalds
         {
 
         }
+
+        private PlotModel GetPlotModel2(Dish dish)
+        {
+            var model = new PlotModel { Title = $"График БЖУ для {dish.Name}" };
+
+            var categoryAxis = new CategoryAxis { Position = AxisPosition.Left };
+            categoryAxis.Labels.Add("Белки");
+            categoryAxis.Labels.Add("Жиры");
+            categoryAxis.Labels.Add("Углеводы");
+            model.Axes.Add(categoryAxis);
+
+            var valueAxis = new LinearAxis { Position = AxisPosition.Bottom, Minimum = 0, Maximum = 350 };
+            model.Axes.Add(valueAxis);
+
+            var series1 = new BarSeries { Title = "Суточная норма (мужчины)", FillColor = OxyColor.FromRgb(0, 0, 255) };
+            series1.Items.Add(new BarItem { Value = 50 });
+            series1.Items.Add(new BarItem { Value = 70 });
+            series1.Items.Add(new BarItem { Value = 300 });
+            model.Series.Add(series1);
+
+            var series2 = new BarSeries { Title = "Суточная норма (женщины)", FillColor = OxyColor.FromRgb(255, 0, 0) };
+            series2.Items.Add(new BarItem { Value = 40 });
+            series2.Items.Add(new BarItem { Value = 60 });
+            series2.Items.Add(new BarItem { Value = 250 });
+            model.Series.Add(series2);
+
+            var series3 = new BarSeries { Title = $"{dish.Name}", FillColor = OxyColor.FromRgb(0, 255, 0) };
+            series3.Items.Add(new BarItem { Value = dish.Protein });
+            series3.Items.Add(new BarItem { Value = dish.Fat });
+            series3.Items.Add(new BarItem { Value = dish.Carbohydrates });
+            model.Series.Add(series3);
+
+            model.IsLegendVisible = true;
+
+            var legend = new Legend
+            {
+                LegendPosition = LegendPosition.BottomCenter,
+                LegendOrientation = LegendOrientation.Horizontal,
+                LegendPlacement = LegendPlacement.Outside,
+                LegendBorder = OxyColors.Black
+            };
+
+            model.Legends.Add(legend);
+          
+            return model;
+        }
+
+        private void DisplayScatterPlot()
+        {
+            var model = new PlotModel { Title = "Распределение блюд по порции и калориям" };
+
+            // Создаем ось X (калории)
+            var caloriesAxis = new LinearAxis
+            {
+                Position = AxisPosition.Bottom,
+                Title = "Калории"
+            };
+            model.Axes.Add(caloriesAxis);
+
+            // Создаем ось Y (углеводы)
+            var carbohydratesAxis = new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Title = "Размер порции"
+            };
+            model.Axes.Add(carbohydratesAxis);
+
+            // Создаем серию точек (для каждого блюда)
+            var scatterSeries = new ScatterSeries
+            {
+                MarkerType = MarkerType.Circle,
+                MarkerSize = 5,
+                MarkerFill = OxyColors.Blue,
+                MarkerStroke = OxyColors.Black,
+                MarkerStrokeThickness = 1.5
+            };
+      
+            // Добавляем точки для каждого блюда из DataTable
+            foreach (DataRow row in menuData.Rows)
+            {
+                string servingSize = row["Serving Size"].ToString();
+                Console.WriteLine(servingSize);
+
+                // Извлекаем числовое значение из строки размера порции 
+                // Предполагаем, что размер порции указан в скобках и в граммах или унциях
+
+                int startIndex = servingSize.IndexOf('(') + 1;
+                int endIndex = servingSize.IndexOf('g', startIndex);
+
+                string servingSizeGrams;
+
+                if (startIndex > 0 && endIndex > startIndex)
+                {
+                    servingSizeGrams = servingSize.Substring(startIndex, endIndex - startIndex).Trim();
+                }
+                else
+                {
+                    // Если размер порции указан в унциях, конвертируем в граммы
+                    startIndex = servingSize.IndexOf('(') + 1;
+                    endIndex = servingSize.IndexOf("oz", startIndex);
+
+                    if (startIndex > 0 && endIndex > startIndex)
+                    {
+                        string servingSizeOz = servingSize.Substring(startIndex, endIndex - startIndex).Trim();
+                        double ounces = Convert.ToDouble(servingSizeOz, CultureInfo.InvariantCulture);
+                        double grams = ounces * 28.35; // 1 унция = 28.35 грамм
+                        servingSizeGrams = grams.ToString();
+                    }
+                    else
+                    {
+                        // Если размер порции указан без обозначения грамм или унций
+                        servingSizeGrams = "Не указано";
+                    }
+                }
+
+                double portion;
+                if (!double.TryParse(servingSizeGrams, out portion))
+                {
+                    continue; // Пропускаем текущее блюдо, если не удалось сконвертировать
+                }
+
+                double calories;
+                if (!double.TryParse(row["Calories"].ToString(), out calories))
+                {
+                    continue; // Пропускаем текущее блюдо, если не удалось сконвертировать
+                }
+         
+                string dishName = row["Item"].ToString();
+
+                scatterSeries.Points.Add(new ScatterPoint(calories, portion, tag: dishName));
+            }
+
+            model.Series.Add(scatterSeries);
+
+            // Создаем PlotView для отображения графика
+            var plotView = new PlotView
+            {
+                Dock = DockStyle.Fill,
+                Model = model
+            };
+
+            // Создаем новую форму для отображения графика
+            var scatterPlotForm = new Form
+            {
+                Text = "Распределение блюд по углеводам и калориям",
+                Size = new Size(800, 600),
+                StartPosition = FormStartPosition.CenterScreen
+            };
+            scatterPlotForm.Controls.Add(plotView);
+
+            // Отображаем форму с графиком
+            scatterPlotForm.ShowDialog();
+        }
     }
+   
+}
+public class Dish
+{
+    public string Name { get; set; }
+    public double Protein { get; set; }
+    public double Fat { get; set; }
+    public double Carbohydrates { get; set; }
 }

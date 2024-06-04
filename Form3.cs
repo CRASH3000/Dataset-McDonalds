@@ -14,41 +14,8 @@ namespace McDonalds
 {
     public partial class Form3 : Form
     {
-
-        static string[] SplitByCommaWithoutQuotes(string input)   //Пропускаем выражения в кавычках при разбиении на пункты
-        {
-            List<string> parts = new List<string>();
-            bool insideQuotes = false;
-            int startIndex = 0;
-
-            for (int i = 0; i < input.Length; i++)
-            {
-                if (input[i] == '"')
-                {
-                    insideQuotes = !insideQuotes;
-                }
-                else if (input[i] == ',' && !insideQuotes)
-                {
-                    parts.Add(input.Substring(startIndex, i - startIndex));
-                    startIndex = i + 1;
-                }
-            }
-
-            parts.Add(input.Substring(startIndex));
-
-            return parts.ToArray();
-        }
-
-
-
         public Form3()
         {
-            List<string[]> words = new List<string[]>();
-            foreach (string line in File.ReadAllLines("Resources\\dataset - menu McDonalds.csv").Skip(1))
-            {
-                words.Add(SplitByCommaWithoutQuotes(line));     //Загружаем файл в коллекцию массивов строк 
-            }
-            SharedData.Data = words;
             InitializeComponent();
             comboBox1.Items.Add("Холестерин");   //10     добавляем значения в раскрывающийся список 
             comboBox1.Items.Add("Натрий");  //12
@@ -68,6 +35,7 @@ namespace McDonalds
             dataGridView1.Rows.Clear();
             int i = 0;
             string change = comboBox1.SelectedItem.ToString();    // считываем значения из раскрывающегося списка и выясняем номер столбца в data
+            dataGridView1.Columns[2].HeaderText = change;
             if (change == "Холестерин")
                 i = 10;
             if (change == "Натрий")
@@ -101,10 +69,7 @@ namespace McDonalds
             }
         }
     }
-    public static class SharedData    //Открываем общий доступ к файлу Data 
-    {
-        public static List<string[]> Data { get; set; }
-    }
+
 
 
 }

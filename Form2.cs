@@ -107,6 +107,20 @@ namespace McDonalds
                 rightPanel.Controls.Add(form3);
                 form3.Show();
             }
+            if (clickedButton != null && clickedButton.Text == "Блюда с транс-жирами")
+            {
+                Form4 form4 = new Form4();
+                form4.TopLevel = false;
+                form4.FormBorderStyle = FormBorderStyle.None;
+                form4.Dock = DockStyle.Fill; // Form3 заполнит весь rightPanel
+
+                // Очистка Panel от предыдущих форм
+                rightPanel.Controls.Clear();
+
+                // Добавление Form3 в rightPanel
+                rightPanel.Controls.Add(form4);
+                form4.Show();
+            }
         }
         private void InitializeRightPanel()
         {

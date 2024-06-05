@@ -57,11 +57,18 @@ namespace McDonalds
         // Метод, который вызывается при загрузке формы
         private void Form2_Load(object sender, EventArgs e)
         {
-            string[] buttonNames = { "Все блюда", "Содержание БЖУ блюд", "Распределение блюд по порции и калориям", "Блюда 0 ккал", "Железо в порциях", "Сахар и Каллории", "Блюда с транс-жирами", "Средння доля Beef & Pork" };
+            string[] buttonNames = { "Все блюда", 
+                "Содержание БЖУ блюд", 
+                "Распределение блюд по порции и калориям", 
+                "Блюда 0 ккал", 
+                "Железо в порциях", 
+                "Сахар и Каллории", 
+                "Блюда с транс-жирами", 
+                "Средння доля Beef & Pork" };
             Image[] buttonImages = {
                 Properties.Resources.AllMenuIcon,
-                Properties.Resources.AllMenuIcon,
-                Properties.Resources.AllMenuIcon,
+                Properties.Resources.ИконкаБЖУ,
+                Properties.Resources.РаспределениеБлюдИконка,
                 Properties.Resources.Water_Icon,
                 Properties.Resources.How_Many_Macchiquins_Icon,
                 Properties.Resources.SugarIcon,
@@ -120,7 +127,10 @@ namespace McDonalds
                     case "Железо в порциях":
                         DisplayIronRequirementContent();
                         break;
-                        
+                    case "Блюда 0 ккал":
+                        DisplayZeroCalorieDishes();
+                        break;
+
                 }
                 if (clickedButton != null && clickedButton.Text == "Сахар и Каллории")
                 {
@@ -161,8 +171,8 @@ namespace McDonalds
             Label titleLabel = new Label();
             titleLabel.Text = "Сравнение суточной нормы БЖУ и БЖУ блюда";
             titleLabel.Location = new Point(10, 10);
-            titleLabel.Size = new Size(300, 20);
-            titleLabel.Font = new Font(titleLabel.Font, FontStyle.Bold);
+            titleLabel.AutoSize = true;
+            titleLabel.Font = new Font(titleLabel.Font.FontFamily, 16, FontStyle.Bold);
             this.rightPanel.Controls.Add(titleLabel);
 
             // Создание метки для комбинированного ввода и списка
@@ -227,8 +237,15 @@ namespace McDonalds
             // Очистка правой панели
             this.rightPanel.Controls.Clear();
 
+            Label headerLabel = new Label();
+            headerLabel.Text = "Все Блюда";
+            headerLabel.Font = new Font(headerLabel.Font.FontFamily, 16, FontStyle.Bold);
+            headerLabel.AutoSize = true;
+            headerLabel.Location = new Point(10, 10);
+            this.rightPanel.Controls.Add(headerLabel);
+
             int xOffset = 10;
-            int yOffset = 10;
+            int yOffset = 40;
             int itemsPerRow = 3;
             int currentItem = 0;
 
@@ -601,7 +618,83 @@ namespace McDonalds
             this.rightPanel.VerticalScroll.Visible = true;
         }
 
+        private void DisplayZeroCalorieDishes()
+        {
+            //Очистка правой панели
+            this.rightPanel.Controls.Clear();
 
+            // Создание заголовка
+            Label headerLabel = new Label();
+            headerLabel.Text = "Блюда 0 ккал";
+            headerLabel.Font = new Font(headerLabel.Font.FontFamily, 16, FontStyle.Bold);
+            headerLabel.AutoSize = true;
+            headerLabel.Location = new Point(10, 10);
+            this.rightPanel.Controls.Add(headerLabel);
+
+            int xOffset = 10;
+            int yOffset = 40;
+            int itemsPerRow = 3;
+            int currentItem = 0;
+
+
+            Image commonImage = Properties.Resources.Water_Icon;
+
+            //Создание панелей для каждого продукта с 0 калориями
+            foreach (DataRow row in menuData.Rows)
+            {
+                //Проверяем значение калорий для текущего продукта
+                double calories;
+                if (double.TryParse(row["Calories"].ToString(), out calories) && calories == 0)
+                {
+                    Panel squarePanel = new Panel();
+                    squarePanel.Size = new Size(200, 200);
+                    squarePanel.Location = new Point(xOffset, yOffset);
+                    squarePanel.BorderStyle = BorderStyle.FixedSingle;
+
+                    Label label = new Label();
+                    label.Text = row["Item"].ToString();
+                    label.AutoSize = true;
+                    label.Location = new Point(10, 10);
+                    squarePanel.Controls.Add(label);
+
+                    //Добавление изображения продукта
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Size = new Size(100, 100);
+                    pictureBox.Location = new Point(10, 40);
+                    pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox.Image = commonImage;
+                    squarePanel.Controls.Add(pictureBox);
+
+                    Button placeholderButton = new Button();
+                    placeholderButton.Text = "⚠ О продукте";
+                    placeholderButton.Size = new Size(100, 50);
+                    placeholderButton.Location = new Point(10, 150);
+                    placeholderButton.Tag = row;
+                    placeholderButton.Click += PlaceholderButton_Click;
+                    squarePanel.Controls.Add(placeholderButton);
+
+                    this.rightPanel.Controls.Add(squarePanel);
+
+                    currentItem++;
+                    if (currentItem % itemsPerRow == 0)
+                    {
+                        xOffset = 10;
+                        yOffset += 210;
+                    }
+                    else
+                    {
+                        xOffset += 210;
+                    }
+                }
+            }
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
+        }
+
+     
     }
 
 }

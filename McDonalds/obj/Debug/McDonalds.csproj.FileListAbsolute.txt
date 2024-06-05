@@ -34,3 +34,21 @@ C:\Users\dimil\Dataset-McDonalds\McDonalds\obj\Debug\McDonalds.csproj.CoreCompil
 C:\Users\dimil\Dataset-McDonalds\McDonalds\obj\Debug\McDonalds.csproj.Up2Date
 C:\Users\dimil\Dataset-McDonalds\McDonalds\obj\Debug\McDonalds.exe
 C:\Users\dimil\Dataset-McDonalds\McDonalds\obj\Debug\McDonalds.pdb
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\Resources\dataset - menu McDonalds.csv
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\McDonalds.exe.config
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\McDonalds.exe
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\McDonalds.pdb
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\OxyPlot.dll
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\OxyPlot.WindowsForms.dll
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\OxyPlot.xml
+C:\Users\crash\source\repos\McDonalds\McDonalds\bin\Debug\OxyPlot.WindowsForms.xml
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.csproj.AssemblyReference.cache
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.Form1.resources
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.Form2.resources
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.Form4.resources
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.Properties.Resources.resources
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.csproj.GenerateResource.cache
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.csproj.CoreCompileInputs.cache
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.csproj.Up2Date
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.exe
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.pdb

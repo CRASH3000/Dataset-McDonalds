@@ -117,6 +117,9 @@ namespace McDonalds
                     case "Распределение блюд по порции и калориям":
                         DisplayScatterPlot();
                         break;
+                    case "Блюда 0 ккал":
+                        DisplayZeroCalorieDishes();
+                        break;
                 }
             }
         }
@@ -472,6 +475,74 @@ namespace McDonalds
 
             // Отображаем форму с графиком
             scatterPlotForm.ShowDialog();
+        }
+
+        private void DisplayZeroCalorieDishes()
+        {
+            //Очистка правой панели
+            this.rightPanel.Controls.Clear();
+
+            int xOffset = 10;
+            int yOffset = 10;
+            int itemsPerRow = 3;
+            int currentItem = 0;
+
+            
+            Image commonImage = Properties.Resources.ZeroCalorieImage;
+
+            //Создание панелей для каждого продукта с 0 калориями
+            foreach (DataRow row in menuData.Rows)
+            {
+                //Проверяем значение калорий для текущего продукта
+                double calories;
+                if (double.TryParse(row["Calories"].ToString(), out calories) && calories == 0)
+                {
+                    Panel squarePanel = new Panel();
+                    squarePanel.Size = new Size(200, 200);
+                    squarePanel.Location = new Point(xOffset, yOffset);
+                    squarePanel.BorderStyle = BorderStyle.FixedSingle;
+
+                    Label label = new Label();
+                    label.Text = row["Item"].ToString();
+                    label.AutoSize = true;
+                    label.Location = new Point(10, 10);
+                    squarePanel.Controls.Add(label);
+
+                    //Добавление изображения продукта
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Size = new Size(100, 100);
+                    pictureBox.Location = new Point(10, 40);
+                    pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox.Image = commonImage; 
+                    squarePanel.Controls.Add(pictureBox);
+
+                    Button placeholderButton = new Button();
+                    placeholderButton.Text = "⚠ О продукте";
+                    placeholderButton.Size = new Size(100, 50);
+                    placeholderButton.Location = new Point(10, 150);
+                    placeholderButton.Tag = row;
+                    placeholderButton.Click += PlaceholderButton_Click;
+                    squarePanel.Controls.Add(placeholderButton);
+
+                    this.rightPanel.Controls.Add(squarePanel);
+
+                    currentItem++;
+                    if (currentItem % itemsPerRow == 0)
+                    {
+                        xOffset = 10; 
+                        yOffset += 210; 
+                    }
+                    else
+                    {
+                        xOffset += 210; 
+                    }
+                }
+            }
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
         }
     }
    

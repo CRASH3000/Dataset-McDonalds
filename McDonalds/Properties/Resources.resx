@@ -118,20 +118,29 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="FatsIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FatsIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="AllMenuIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\AllMenuIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="0vfvhjjkxlftnc8ijbp0wdy8nioa616h" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\0vfvhjjkxlftnc8ijbp0wdy8nioa616h.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="168632149318118637" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\168632149318118637.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SugarIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SugarIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="How Many Macchiquins Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\How Many Macchiquins Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Water Icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Water Icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="BeefPorkIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\BeefPorkIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="0vfvhjjkxlftnc8ijbp0wdy8nioa616h" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\0vfvhjjkxlftnc8ijbp0wdy8nioa616h.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Ned-Flanders" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Ned-Flanders.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -145,13 +154,10 @@
   <data name="Smp3" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Smp3.gif;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="SugarIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\SugarIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="ИконкаБЖУ" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\ИконкаБЖУ.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="FatsIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\FatsIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="BeefPorkIcon" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\BeefPorkIcon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="РаспределениеБлюдИконка" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\РаспределениеБлюдИконка.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

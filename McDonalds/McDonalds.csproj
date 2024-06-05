@@ -150,5 +150,11 @@
   <ItemGroup>
     <None Include="Resources\BeefPorkIcon.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\ИконкаБЖУ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\РаспределениеБлюдИконка.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

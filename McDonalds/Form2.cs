@@ -57,7 +57,7 @@ namespace McDonalds
         // Метод, который вызывается при загрузке формы
         private void Form2_Load(object sender, EventArgs e)
         {
-            string[] buttonNames = { "Все блюда", "Содержание БЖУ блюд", "Распределение блюд по порции и калориям", "Блюда 0 ккал", "McChiken и железо", "Сахар и Каллории", "Блюда с транс-жирами", "Средння доля Beef & Pork" };
+            string[] buttonNames = { "Все блюда", "Содержание БЖУ блюд", "Распределение блюд по порции и калориям", "Блюда 0 ккал", "Железо в порциях", "Сахар и Каллории", "Блюда с транс-жирами", "Средння доля Beef & Pork" };
             Image[] buttonImages = {
                 Properties.Resources.AllMenuIcon,
                 Properties.Resources.AllMenuIcon,
@@ -117,6 +117,10 @@ namespace McDonalds
                     case "Распределение блюд по порции и калориям":
                         DisplayScatterPlot();
                         break;
+                    case "Железо в порциях":
+                        DisplayIronRequirementContent();
+                        break;
+                        
                 }
                 if (clickedButton != null && clickedButton.Text == "Сахар и Каллории")
                 {
@@ -512,6 +516,91 @@ namespace McDonalds
             // Добавляем PlotView на rightPanel
             this.rightPanel.Controls.Add(plotView);
         }
+
+        private void DisplayIronRequirementContent()
+        {
+            // Очистка правой панели
+            this.rightPanel.Controls.Clear();
+
+            // Создание заголовка
+            Label titleLabel = new Label();
+            titleLabel.Text = "Расчет порций для суточной нормы железа";
+            titleLabel.Location = new Point(10, 10);
+            titleLabel.Size = new Size(300, 20);
+            titleLabel.Font = new Font(titleLabel.Font, FontStyle.Bold);
+            this.rightPanel.Controls.Add(titleLabel);
+
+            // Создание метки для комбинированного ввода и списка
+            Label searchLabel = new Label();
+            searchLabel.Text = "Введите название блюда";
+            searchLabel.Location = new Point(10, 40);
+            searchLabel.Size = new Size(200, 20);
+            this.rightPanel.Controls.Add(searchLabel);
+
+            // Создание ComboBox для ввода и списка блюд
+            ComboBox dishComboBox = new ComboBox();
+            dishComboBox.Location = new Point(10, 70);
+            dishComboBox.Size = new Size(200, 20);
+            dishComboBox.DropDownStyle = ComboBoxStyle.DropDown;
+            this.rightPanel.Controls.Add(dishComboBox);
+
+            // Создание метки для вывода результата
+            Label resultLabel = new Label();
+            resultLabel.Location = new Point(10, 100);
+            resultLabel.Size = new Size(700, 20);
+            this.rightPanel.Controls.Add(resultLabel);
+
+            // Настройка поиска блюд
+            dishComboBox.TextChanged += (sender, e) =>
+            {
+                string query = dishComboBox.Text.ToLower();
+                var filteredDishes = menuData.AsEnumerable()
+                    .Where(row => row.Field<string>("Item").ToLower().Contains(query))
+                    .Select(row => row.Field<string>("Item"))
+                    .ToList();
+
+                dishComboBox.Items.Clear();
+                dishComboBox.Items.AddRange(filteredDishes.ToArray());
+                dishComboBox.DroppedDown = true; // Открыть выпадающий список
+                dishComboBox.SelectionStart = query.Length; // Установить курсор в конец текста
+                dishComboBox.SelectionLength = 0; // Убрать выделение
+            };
+
+            // Настройка действия при выборе блюда из списка
+            dishComboBox.SelectedIndexChanged += (sender, e) =>
+            {
+                if (dishComboBox.SelectedItem != null)
+                {
+                    string selectedDish = dishComboBox.SelectedItem.ToString();
+                    var selectedRow = menuData.AsEnumerable()
+                        .FirstOrDefault(row => row.Field<string>("Item") == selectedDish);
+
+                    if (selectedRow != null)
+                    {
+                        double ironContent;
+                        if (double.TryParse(selectedRow["Iron (% Daily Value)"].ToString(), out ironContent) && ironContent > 0)
+                        {
+                     
+                            double portionsRequired = 100 / ironContent;
+                            int wholePortionsRequired = (int)Math.Ceiling(portionsRequired);
+                            resultLabel.Text = $"Для покрытия суточной нормы железа требуется {wholePortionsRequired} порций блюда '{selectedDish}'.";
+                        }
+                        else
+                        {
+                            resultLabel.Text = $"Информация о содержании железа в блюде '{selectedDish}' недоступна.";
+                        }
+                    }
+                }
+            };
+
+            // Настройка прокрутки
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
+        }
+
 
     }
 

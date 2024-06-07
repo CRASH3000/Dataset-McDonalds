@@ -57,11 +57,18 @@ namespace McDonalds
         // Метод, который вызывается при загрузке формы
         private void Form2_Load(object sender, EventArgs e)
         {
-            string[] buttonNames = { "Все блюда", "Содержание БЖУ блюд", "Распределение блюд по порции и калориям", "Блюда 0 ккал", "McChiken и железо", "Сахар и Каллории", "Блюда с транс-жирами", "Средння доля Beef & Pork" };
+            string[] buttonNames = { "Все блюда", 
+                "Содержание БЖУ блюд", 
+                "Распределение блюд по порции и калориям", 
+                "Блюда 0 ккал", 
+                "Железо в порциях", 
+                "Сахар и Каллории", 
+                "Блюда с транс-жирами", 
+                "Средння доля Beef & Pork" };
             Image[] buttonImages = {
                 Properties.Resources.AllMenuIcon,
-                Properties.Resources.AllMenuIcon,
-                Properties.Resources.AllMenuIcon,
+                Properties.Resources.ИконкаБЖУ,
+                Properties.Resources.РаспределениеБлюдИконка,
                 Properties.Resources.Water_Icon,
                 Properties.Resources.How_Many_Macchiquins_Icon,
                 Properties.Resources.SugarIcon,
@@ -117,32 +124,75 @@ namespace McDonalds
                     case "Распределение блюд по порции и калориям":
                         DisplayScatterPlot();
                         break;
+                    case "Железо в порциях":
+                        DisplayIronRequirementContent();
+                        break;
+                    case "Блюда 0 ккал":
+                        DisplayZeroCalorieDishes();
+                        break;
+
+                }
+                if (clickedButton != null && clickedButton.Text == "Сахар и Каллории")
+                {
+                    Form3 form3 = new Form3();
+                    form3.TopLevel = false;
+                    form3.FormBorderStyle = FormBorderStyle.None;
+                    form3.Dock = DockStyle.Fill; // Form3 заполнит весь rightPanel
+
+                    // Очистка Panel от предыдущих форм
+                    rightPanel.Controls.Clear();
+
+                    // Добавление Form3 в rightPanel
+                    rightPanel.Controls.Add(form3);
+                    form3.Show();
+                }
+                if (clickedButton != null && clickedButton.Text == "Блюда с транс-жирами")
+                {
+                    Form4 form4 = new Form4();
+                    form4.TopLevel = false;
+                    form4.FormBorderStyle = FormBorderStyle.None;
+                    form4.Dock = DockStyle.Fill; // Form3 заполнит весь rightPanel
+
+                    // Очистка Panel от предыдущих форм
+                    rightPanel.Controls.Clear();
+
+                    // Добавление Form3 в rightPanel
+                    rightPanel.Controls.Add(form4);
+                    form4.Show();
                 }
             }
         }
-
         private void DisplaySearchProductContent()
         {
             // Очистка правой панели
             this.rightPanel.Controls.Clear();
 
-            // Создание TextBox для ввода поиска
-            TextBox searchTextBox = new TextBox();
-            searchTextBox.Location = new Point(10, 10);
-            searchTextBox.Size = new Size(200, 20);
-            this.rightPanel.Controls.Add(searchTextBox);
+            // Создание заголовка
+            Label titleLabel = new Label();
+            titleLabel.Text = "Сравнение суточной нормы БЖУ и БЖУ блюда";
+            titleLabel.Location = new Point(10, 10);
+            titleLabel.AutoSize = true;
+            titleLabel.Font = new Font(titleLabel.Font.FontFamily, 16, FontStyle.Bold);
+            this.rightPanel.Controls.Add(titleLabel);
 
-            // Создание ComboBox для выпадающего списка блюд
+            // Создание метки для комбинированного ввода и списка
+            Label searchLabel = new Label();
+            searchLabel.Text = "Введите название блюда";
+            searchLabel.Location = new Point(10, 40);
+            searchLabel.Size = new Size(200, 20);
+            this.rightPanel.Controls.Add(searchLabel);
+
+            // Создание ComboBox для ввода и списка блюд
             ComboBox dishComboBox = new ComboBox();
-            dishComboBox.Location = new Point(10, 40);
+            dishComboBox.Location = new Point(10, 70);
             dishComboBox.Size = new Size(200, 20);
-            dishComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            dishComboBox.DropDownStyle = ComboBoxStyle.DropDown;
             this.rightPanel.Controls.Add(dishComboBox);
 
             // Настройка поиска блюд
-            searchTextBox.TextChanged += (sender, e) =>
+            dishComboBox.TextChanged += (sender, e) =>
             {
-                string query = searchTextBox.Text.ToLower();
+                string query = dishComboBox.Text.ToLower();
                 var filteredDishes = menuData.AsEnumerable()
                     .Where(row => row.Field<string>("Item").ToLower().Contains(query))
                     .Select(row => row.Field<string>("Item"))
@@ -150,6 +200,9 @@ namespace McDonalds
 
                 dishComboBox.Items.Clear();
                 dishComboBox.Items.AddRange(filteredDishes.ToArray());
+                dishComboBox.DroppedDown = true; // Открыть выпадающий список
+                dishComboBox.SelectionStart = query.Length; // Установить курсор в конец текста
+                dishComboBox.SelectionLength = 0; // Убрать выделение
             };
 
             // Настройка действия при выборе блюда из списка
@@ -176,14 +229,23 @@ namespace McDonalds
             this.rightPanel.VerticalScroll.Visible = true;
         }
 
+
+
         // Метод для отображения контента в правой панели
         private void DisplayRightPanelContent()
         {
             // Очистка правой панели
             this.rightPanel.Controls.Clear();
 
+            Label headerLabel = new Label();
+            headerLabel.Text = "Все Блюда";
+            headerLabel.Font = new Font(headerLabel.Font.FontFamily, 16, FontStyle.Bold);
+            headerLabel.AutoSize = true;
+            headerLabel.Location = new Point(10, 10);
+            this.rightPanel.Controls.Add(headerLabel);
+
             int xOffset = 10;
-            int yOffset = 10;
+            int yOffset = 40;
             int itemsPerRow = 3;
             int currentItem = 0;
 
@@ -394,18 +456,17 @@ namespace McDonalds
                 MarkerSize = 5,
                 MarkerFill = OxyColors.Blue,
                 MarkerStroke = OxyColors.Black,
-                MarkerStrokeThickness = 1.5
+                MarkerStrokeThickness = 1.5,
+                TrackerFormatString = "Блюдо: {Tag}\nКалории: {X}\nРазмер порции: {Y}"
             };
-      
+
             // Добавляем точки для каждого блюда из DataTable
             foreach (DataRow row in menuData.Rows)
             {
                 string servingSize = row["Serving Size"].ToString();
                 Console.WriteLine(servingSize);
 
-                // Извлекаем числовое значение из строки размера порции 
-                // Предполагаем, что размер порции указан в скобках и в граммах или унциях
-
+                // Извлекаем числовое значение из строки размера порции
                 int startIndex = servingSize.IndexOf('(') + 1;
                 int endIndex = servingSize.IndexOf('g', startIndex);
 
@@ -446,10 +507,15 @@ namespace McDonalds
                 {
                     continue; // Пропускаем текущее блюдо, если не удалось сконвертировать
                 }
-         
+
                 string dishName = row["Item"].ToString();
 
-                scatterSeries.Points.Add(new ScatterPoint(calories, portion, tag: dishName));
+                var point = new ScatterPoint(calories, portion)
+                {
+                    Tag = dishName
+                };
+
+                scatterSeries.Points.Add(point);
             }
 
             model.Series.Add(scatterSeries);
@@ -461,20 +527,176 @@ namespace McDonalds
                 Model = model
             };
 
-            // Создаем новую форму для отображения графика
-            var scatterPlotForm = new Form
-            {
-                Text = "Распределение блюд по углеводам и калориям",
-                Size = new Size(800, 600),
-                StartPosition = FormStartPosition.CenterScreen
-            };
-            scatterPlotForm.Controls.Add(plotView);
+            // Очистка правой панели
+            this.rightPanel.Controls.Clear();
 
-            // Отображаем форму с графиком
-            scatterPlotForm.ShowDialog();
+            // Добавляем PlotView на rightPanel
+            this.rightPanel.Controls.Add(plotView);
         }
+
+        private void DisplayIronRequirementContent()
+        {
+            // Очистка правой панели
+            this.rightPanel.Controls.Clear();
+
+            // Создание заголовка
+            Label titleLabel = new Label();
+            titleLabel.Text = "Расчет порций для суточной нормы железа";
+            titleLabel.Location = new Point(10, 10);
+            titleLabel.Size = new Size(300, 20);
+            titleLabel.Font = new Font(titleLabel.Font, FontStyle.Bold);
+            this.rightPanel.Controls.Add(titleLabel);
+
+            // Создание метки для комбинированного ввода и списка
+            Label searchLabel = new Label();
+            searchLabel.Text = "Введите название блюда";
+            searchLabel.Location = new Point(10, 40);
+            searchLabel.Size = new Size(200, 20);
+            this.rightPanel.Controls.Add(searchLabel);
+
+            // Создание ComboBox для ввода и списка блюд
+            ComboBox dishComboBox = new ComboBox();
+            dishComboBox.Location = new Point(10, 70);
+            dishComboBox.Size = new Size(200, 20);
+            dishComboBox.DropDownStyle = ComboBoxStyle.DropDown;
+            this.rightPanel.Controls.Add(dishComboBox);
+
+            // Создание метки для вывода результата
+            Label resultLabel = new Label();
+            resultLabel.Location = new Point(10, 100);
+            resultLabel.Size = new Size(700, 20);
+            this.rightPanel.Controls.Add(resultLabel);
+
+            // Настройка поиска блюд
+            dishComboBox.TextChanged += (sender, e) =>
+            {
+                string query = dishComboBox.Text.ToLower();
+                var filteredDishes = menuData.AsEnumerable()
+                    .Where(row => row.Field<string>("Item").ToLower().Contains(query))
+                    .Select(row => row.Field<string>("Item"))
+                    .ToList();
+
+                dishComboBox.Items.Clear();
+                dishComboBox.Items.AddRange(filteredDishes.ToArray());
+                dishComboBox.DroppedDown = true; // Открыть выпадающий список
+                dishComboBox.SelectionStart = query.Length; // Установить курсор в конец текста
+                dishComboBox.SelectionLength = 0; // Убрать выделение
+            };
+
+            // Настройка действия при выборе блюда из списка
+            dishComboBox.SelectedIndexChanged += (sender, e) =>
+            {
+                if (dishComboBox.SelectedItem != null)
+                {
+                    string selectedDish = dishComboBox.SelectedItem.ToString();
+                    var selectedRow = menuData.AsEnumerable()
+                        .FirstOrDefault(row => row.Field<string>("Item") == selectedDish);
+
+                    if (selectedRow != null)
+                    {
+                        double ironContent;
+                        if (double.TryParse(selectedRow["Iron (% Daily Value)"].ToString(), out ironContent) && ironContent > 0)
+                        {
+                     
+                            double portionsRequired = 100 / ironContent;
+                            int wholePortionsRequired = (int)Math.Ceiling(portionsRequired);
+                            resultLabel.Text = $"Для покрытия суточной нормы железа требуется {wholePortionsRequired} порций блюда '{selectedDish}'.";
+                        }
+                        else
+                        {
+                            resultLabel.Text = $"Информация о содержании железа в блюде '{selectedDish}' недоступна.";
+                        }
+                    }
+                }
+            };
+
+            // Настройка прокрутки
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
+        }
+
+        private void DisplayZeroCalorieDishes()
+        {
+            //Очистка правой панели
+            this.rightPanel.Controls.Clear();
+
+            // Создание заголовка
+            Label headerLabel = new Label();
+            headerLabel.Text = "Блюда 0 ккал";
+            headerLabel.Font = new Font(headerLabel.Font.FontFamily, 16, FontStyle.Bold);
+            headerLabel.AutoSize = true;
+            headerLabel.Location = new Point(10, 10);
+            this.rightPanel.Controls.Add(headerLabel);
+
+            int xOffset = 10;
+            int yOffset = 40;
+            int itemsPerRow = 3;
+            int currentItem = 0;
+
+
+            Image commonImage = Properties.Resources.Water_Icon;
+
+            //Создание панелей для каждого продукта с 0 калориями
+            foreach (DataRow row in menuData.Rows)
+            {
+                //Проверяем значение калорий для текущего продукта
+                double calories;
+                if (double.TryParse(row["Calories"].ToString(), out calories) && calories == 0)
+                {
+                    Panel squarePanel = new Panel();
+                    squarePanel.Size = new Size(200, 200);
+                    squarePanel.Location = new Point(xOffset, yOffset);
+                    squarePanel.BorderStyle = BorderStyle.FixedSingle;
+
+                    Label label = new Label();
+                    label.Text = row["Item"].ToString();
+                    label.AutoSize = true;
+                    label.Location = new Point(10, 10);
+                    squarePanel.Controls.Add(label);
+
+                    //Добавление изображения продукта
+                    PictureBox pictureBox = new PictureBox();
+                    pictureBox.Size = new Size(100, 100);
+                    pictureBox.Location = new Point(10, 40);
+                    pictureBox.SizeMode = PictureBoxSizeMode.StretchImage;
+                    pictureBox.Image = commonImage;
+                    squarePanel.Controls.Add(pictureBox);
+
+                    Button placeholderButton = new Button();
+                    placeholderButton.Text = "⚠ О продукте";
+                    placeholderButton.Size = new Size(100, 50);
+                    placeholderButton.Location = new Point(10, 150);
+                    placeholderButton.Tag = row;
+                    placeholderButton.Click += PlaceholderButton_Click;
+                    squarePanel.Controls.Add(placeholderButton);
+
+                    this.rightPanel.Controls.Add(squarePanel);
+
+                    currentItem++;
+                    if (currentItem % itemsPerRow == 0)
+                    {
+                        xOffset = 10;
+                        yOffset += 210;
+                    }
+                    else
+                    {
+                        xOffset += 210;
+                    }
+                }
+            }
+            this.rightPanel.AutoScroll = true;
+            this.rightPanel.HorizontalScroll.Enabled = false;
+            this.rightPanel.HorizontalScroll.Visible = false;
+            this.rightPanel.VerticalScroll.Enabled = true;
+            this.rightPanel.VerticalScroll.Visible = true;
+        }
+
+     
     }
-   
+
 }
 public class Dish
 {

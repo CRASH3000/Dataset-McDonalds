@@ -52,3 +52,4 @@ C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.csproj.CoreC
 C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.csproj.Up2Date
 C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.exe
 C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.pdb
+C:\Users\crash\source\repos\McDonalds\McDonalds\obj\Debug\McDonalds.CalculateAverageElementRatio.resources

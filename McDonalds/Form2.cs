@@ -160,6 +160,18 @@ namespace McDonalds
                     rightPanel.Controls.Add(form4);
                     form4.Show();
                 }
+                if (clickedButton != null && clickedButton.Text == "Средння доля Beef & Pork")
+                {
+                    CalculateAverageElementRatio calculateAverageElementRatio = new CalculateAverageElementRatio();
+                    calculateAverageElementRatio.TopLevel = false;
+                    calculateAverageElementRatio.FormBorderStyle = FormBorderStyle.None;
+                    calculateAverageElementRatio.Dock = DockStyle.Fill;
+                    // Очистка Panel от предыдущих форм
+                    rightPanel.Controls.Clear();
+
+                    rightPanel.Controls.Add(calculateAverageElementRatio);
+                    calculateAverageElementRatio.Show();
+                }
             }
         }
         private void DisplaySearchProductContent()
